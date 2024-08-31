@@ -13,21 +13,47 @@ class CodeNode extends ElementNode {
   CodeNode(this.text, this.codeConfig);
 
   @override
-  InlineSpan build() => TextSpan(style: style, text: text);
+  InlineSpan build() {
+    return WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: Container(
+        padding: codeConfig.padding,
+        decoration: codeConfig.decoration,
+        child: Text(
+          text,
+          style: codeConfig.style,
+        ),
+      ),
+    );
+  }
 
-  @override
-  TextStyle get style => codeConfig.style.merge(parentStyle);
+  // @override
+  // TextStyle get style => codeConfig.style.merge(parentStyle);
 }
 
 ///config class for code, tag: code
 class CodeConfig implements InlineConfig {
   final TextStyle style;
 
-  const CodeConfig(
-      {this.style = const TextStyle(backgroundColor: Color(0xCCeff1f3))});
+  final BoxDecoration decoration;
+  final EdgeInsets padding;
 
-  static CodeConfig get darkConfig =>
-      CodeConfig(style: const TextStyle(backgroundColor: Color(0xCC555555)));
+  const CodeConfig({
+    this.style = const TextStyle(fontWeight: FontWeight.w500),
+    this.decoration = const BoxDecoration(
+      color: Color(0xCCeff1f3),
+      borderRadius: BorderRadius.all(Radius.circular(3)),
+    ),
+    this.padding = const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+  });
+
+  static CodeConfig get darkConfig => CodeConfig(
+        decoration: BoxDecoration(
+          color: Color(0xCC555555),
+          borderRadius: BorderRadius.all(Radius.circular(3)),
+        ),
+      );
 
   @nonVirtual
   @override
