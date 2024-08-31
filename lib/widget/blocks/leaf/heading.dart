@@ -98,6 +98,8 @@ abstract class HeadingConfig implements LeafConfig {
 
   TextStyle get style;
 
+  bool get useDivider => true;
+
   HeadingDivider? get divider => null;
 
   EdgeInsets get padding => EdgeInsets.only(top: 8, bottom: 4);
@@ -108,27 +110,33 @@ class H1Config extends HeadingConfig {
   @override
   final TextStyle style;
 
-  const H1Config(
-      {this.style = const TextStyle(
-        fontSize: 32,
-        height: 40 / 32,
-        fontWeight: FontWeight.bold,
-      )});
+  @override
+  final bool useDivider;
+
+  const H1Config({
+    this.style = const TextStyle(
+      fontSize: 32,
+      height: 40 / 32,
+      fontWeight: FontWeight.bold,
+    ),
+    this.useDivider = true,
+  });
 
   @nonVirtual
   @override
   String get tag => MarkdownTag.h1.name;
 
   static H1Config get darkConfig => const H1Config(
-          style: TextStyle(
-        fontSize: 32,
-        height: 40 / 32,
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-      ));
+        style: TextStyle(
+          fontSize: 32,
+          height: 40 / 32,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      );
 
   @override
-  HeadingDivider? get divider => HeadingDivider.h1;
+  HeadingDivider? get divider => useDivider ? HeadingDivider.h1 : null;
 }
 
 ///config class for h2
@@ -136,12 +144,17 @@ class H2Config extends HeadingConfig {
   @override
   final TextStyle style;
 
-  const H2Config(
-      {this.style = const TextStyle(
-        fontSize: 24,
-        height: 30 / 24,
-        fontWeight: FontWeight.bold,
-      )});
+  @override
+  final bool useDivider;
+
+  const H2Config({
+    this.style = const TextStyle(
+      fontSize: 24,
+      height: 30 / 24,
+      fontWeight: FontWeight.bold,
+    ),
+    this.useDivider = true,
+  });
 
   @nonVirtual
   @override
@@ -156,7 +169,7 @@ class H2Config extends HeadingConfig {
       ));
 
   @override
-  HeadingDivider? get divider => HeadingDivider.h2;
+  HeadingDivider? get divider => useDivider ? HeadingDivider.h2 : null;
 }
 
 ///config class for h3
@@ -164,12 +177,17 @@ class H3Config extends HeadingConfig {
   @override
   final TextStyle style;
 
-  const H3Config(
-      {this.style = const TextStyle(
-        fontSize: 20,
-        height: 25 / 20,
-        fontWeight: FontWeight.bold,
-      )});
+  @override
+  final bool useDivider;
+
+  const H3Config({
+    this.style = const TextStyle(
+      fontSize: 20,
+      height: 25 / 20,
+      fontWeight: FontWeight.bold,
+    ),
+    this.useDivider = true,
+  });
 
   @nonVirtual
   @override
@@ -184,13 +202,16 @@ class H3Config extends HeadingConfig {
       ));
 
   @override
-  HeadingDivider? get divider => HeadingDivider.h3;
+  HeadingDivider? get divider => useDivider ? HeadingDivider.h3 : null;
 }
 
 ///config class for h4
 class H4Config extends HeadingConfig {
   @override
   final TextStyle style;
+
+  @override
+  final bool useDivider = false;
 
   const H4Config(
       {this.style = const TextStyle(
@@ -217,6 +238,9 @@ class H5Config extends HeadingConfig {
   @override
   final TextStyle style;
 
+  @override
+  final bool useDivider = false;
+
   const H5Config(
       {this.style = const TextStyle(
         fontSize: 16,
@@ -241,6 +265,9 @@ class H5Config extends HeadingConfig {
 class H6Config extends HeadingConfig {
   @override
   final TextStyle style;
+
+  @override
+  final bool useDivider = false;
 
   const H6Config(
       {this.style = const TextStyle(
