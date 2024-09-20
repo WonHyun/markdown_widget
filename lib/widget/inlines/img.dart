@@ -12,6 +12,21 @@ class ImageNode extends SpanNode {
 
   ImageNode(this.attributes, this.config, this.visitor);
 
+  Alignment _getAlignmentFromAttribute(String? attribute) {
+    if (attribute == null) {
+      return imgConfig.alignment;
+    }
+    switch (attribute) {
+      case "center":
+        return Alignment.center;
+      case "right":
+        return Alignment.centerRight;
+      case "left":
+      default:
+        return Alignment.centerLeft;
+    }
+  }
+
   @override
   InlineSpan build() {
     double? width;
@@ -23,6 +38,7 @@ class ImageNode extends SpanNode {
     final imageUrl = attributes['src'] ?? '';
     final alt = attributes['alt'] ?? '';
     final isNetImage = imageUrl.startsWith('http');
+    final align = _getAlignmentFromAttribute(attributes['align']);
     final imgWidget = isNetImage
         ? Image.network(imageUrl,
             width: width,
@@ -43,7 +59,11 @@ class ImageNode extends SpanNode {
             );
           });
     return WidgetSpan(
-        child: imgConfig.builder?.call(imageUrl, attributes) ?? result);
+      child: Align(
+        alignment: align,
+        child: imgConfig.builder?.call(imageUrl, attributes) ?? result,
+      ),
+    );
   }
 
   Widget buildErrorImage(String url, String alt, Object? error) {
@@ -77,7 +97,13 @@ class ImgConfig implements InlineConfig {
   ///use [errorBuilder] to return a custom error image
   final ErrorImgBuilder? errorBuilder;
 
-  const ImgConfig({this.builder, this.errorBuilder});
+  final Alignment alignment;
+
+  const ImgConfig({
+    this.builder,
+    this.errorBuilder,
+    this.alignment = Alignment.centerLeft,
+  });
 
   @nonVirtual
   @override
