@@ -18,7 +18,6 @@ class HeadingNode extends ElementNode {
   @override
   InlineSpan build() {
     final divider = headingConfig.divider;
-    if (divider == null) return childrenSpan;
     return WidgetSpan(
       child: Padding(
         padding: headingConfig.padding,
@@ -30,7 +29,8 @@ class HeadingNode extends ElementNode {
               childrenSpan,
               richTextBuilder: visitor.richTextBuilder,
             ),
-            _Divider(divider: divider.copy(color: parentStyle?.color)),
+            if (divider != null)
+              _Divider(divider: divider.copy(color: parentStyle?.color)),
           ],
         ),
       ),
