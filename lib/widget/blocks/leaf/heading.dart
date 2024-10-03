@@ -113,6 +113,9 @@ class H1Config extends HeadingConfig {
   @override
   final bool useDivider;
 
+  @override
+  final EdgeInsets padding;
+
   const H1Config({
     this.style = const TextStyle(
       fontSize: 32,
@@ -120,6 +123,7 @@ class H1Config extends HeadingConfig {
       fontWeight: FontWeight.bold,
     ),
     this.useDivider = true,
+    this.padding = const EdgeInsets.only(top: 8, bottom: 4),
   });
 
   @nonVirtual
