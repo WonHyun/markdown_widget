@@ -27,19 +27,14 @@ class ImageNode extends SpanNode {
     }
   }
 
-  @override
-  InlineSpan build() {
-    double? width;
-    double? height;
-    if (attributes['width'] != null) width = double.parse(attributes['width']!);
-    if (attributes['height'] != null) {
-      height = double.parse(attributes['height']!);
-    }
-    final imageUrl = attributes['src'] ?? '';
-    final alt = attributes['alt'] ?? '';
-    final isNetImage = imageUrl.startsWith('http');
-    final align = _getAlignmentFromAttribute(attributes['align']);
-    final imgWidget = isNetImage
+  Widget _buildImageWidget(
+    String imageUrl,
+    double? width,
+    double? height,
+    String alt,
+    bool isNetImage,
+  ) {
+    return isNetImage
         ? Image.network(imageUrl,
             width: width,
             height: height,
@@ -50,6 +45,23 @@ class ImageNode extends SpanNode {
             errorBuilder: (ctx, error, stacktrace) {
             return buildErrorImage(imageUrl, alt, error);
           });
+  }
+
+  Widget buildWidget() {
+    double? width;
+    double? height;
+    if (attributes['width'] != null) width = double.parse(attributes['width']!);
+    if (attributes['height'] != null) {
+      height = double.parse(attributes['height']!);
+    }
+    final imageUrl = attributes['src'] ?? '';
+    final alt = attributes['alt'] ?? '';
+    final isNetImage = imageUrl.startsWith('http');
+    final align = _getAlignmentFromAttribute(attributes['align']);
+
+    final imgWidget =
+        _buildImageWidget(imageUrl, width, height, alt, isNetImage);
+
     final result = (parent != null && parent is LinkNode)
         ? imgWidget
         : Builder(builder: (context) {
@@ -58,11 +70,17 @@ class ImageNode extends SpanNode {
               onTap: () => _showImage(context, imgWidget),
             );
           });
+
+    return Align(
+      alignment: align,
+      child: imgConfig.builder?.call(imageUrl, attributes) ?? result,
+    );
+  }
+
+  @override
+  InlineSpan build() {
     return WidgetSpan(
-      child: Align(
-        alignment: align,
-        child: imgConfig.builder?.call(imageUrl, attributes) ?? result,
-      ),
+      child: buildWidget(),
     );
   }
 
