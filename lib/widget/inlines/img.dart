@@ -74,20 +74,20 @@ class ImageNode extends SpanNode {
 
     return Align(
       alignment: align,
-      child: Column(
-        children: [
-          imgConfig.builder?.call(imageUrl, attributes) ?? result,
-          if (caption.isNotEmpty) ...[
-            SizedBox(height: 10),
-            Text(
-              caption,
-              style: parentStyle?.copyWith(
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        ],
-      ),
+      child: caption.isNotEmpty
+          ? Column(
+              children: [
+                imgConfig.builder?.call(imageUrl, attributes) ?? result,
+                SizedBox(height: 10),
+                Text(
+                  caption,
+                  style: parentStyle?.copyWith(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            )
+          : imgConfig.builder?.call(imageUrl, attributes) ?? result,
     );
   }
 
