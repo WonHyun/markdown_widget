@@ -58,6 +58,7 @@ class ImageNode extends SpanNode {
     final alt = attributes['alt'] ?? '';
     final isNetImage = imageUrl.startsWith('http');
     final align = _getAlignmentFromAttribute(attributes['align']);
+    final caption = attributes['caption'] ?? '';
 
     final imgWidget =
         _buildImageWidget(imageUrl, width, height, alt, isNetImage);
@@ -73,7 +74,20 @@ class ImageNode extends SpanNode {
 
     return Align(
       alignment: align,
-      child: imgConfig.builder?.call(imageUrl, attributes) ?? result,
+      child: Column(
+        children: [
+          imgConfig.builder?.call(imageUrl, attributes) ?? result,
+          if (caption.isNotEmpty) ...[
+            SizedBox(height: 10),
+            Text(
+              caption,
+              style: parentStyle?.copyWith(
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
